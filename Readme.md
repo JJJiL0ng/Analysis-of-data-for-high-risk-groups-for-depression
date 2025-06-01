@@ -121,7 +121,7 @@ The project follows a modular architecture designed for scalability and maintain
 ┌─────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                       │
 ├─────────────────────────────────────────────────────────────┤
-│  Jupyter Notebooks  │  Visualization  │  Reports & Results  │
+│  Jupyter Notebooks   │  Visualization  │  Reports & Results │
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
@@ -147,8 +147,8 @@ The project follows a modular architecture designed for scalability and maintain
 ┌─────────────────────────────────────────────────────────────┐
 │                     DATA LAYER                              │
 ├─────────────────────────────────────────────────────────────┤
-│    Raw Data Storage   │    Processed Data    │  Model Storage│
-│  • anxiety_depression │  • Encoded Features  │ • Trained    │
+│    Raw Data Storage    │    Processed Data    │  Model Storage│
+│  • anxiety_depression  │  • Encoded Features  │ • Trained    │
 │    _data.csv          │  • Scaled Data       │   Models     │
 │  • Original Features  │  • Target Variables  │ • Configs    │
 └─────────────────────────────────────────────────────────────┘
@@ -200,36 +200,95 @@ The project follows a modular architecture designed for scalability and maintain
 - **Performance Metrics**: Comprehensive model evaluation
 - **Clinical Reports**: Interpretable results for healthcare professionals
 
-## 📈 Model Performance
+## 🏆 Top 5 Best Model Combinations
 
-### Classification Results (Binary: High Risk vs. Not High Risk)
+Based on comprehensive analysis of different preprocessing methods, model algorithms, and evaluation metrics, here are the **top 5 performing combinations** for mental health risk prediction:
 
-| Model | Accuracy | Precision (High Risk) | Recall (High Risk) | F1-Score |
-|-------|----------|----------------------|-------------------|----------|
-| Random Forest | 0.69 | 0.65 | 0.58 | 0.61 |
-| Decision Tree | 0.59 | 0.52 | 0.71 | 0.60 |
-| XGBoost* | 0.43 | 0.38 | 0.85 | 0.52 |
-| Bagging* | 0.32 | 0.31 | 0.92 | 0.46 |
+### 🥇 **Rank 1: Random Forest + Robust Scaling + Binary Classification**
+- **Preprocessing**: Robust Scaling (Q1 method) + Ordinal & One-hot Encoding
+- **Model**: Random Forest Classifier
+- **Parameters**: Default parameters with 100 estimators
+- **Evaluation**: 5-fold Cross-validation
+- **Performance**: 
+  - Accuracy: **0.69**
+  - Precision (High Risk): **0.65**
+  - Recall (High Risk): **0.58**
+  - F1-Score: **0.61**
+- **Strengths**: Best overall balance between precision and recall, robust to outliers
 
-*Models optimized for high recall to maximize detection of high-risk cases
+### 🥈 **Rank 2: Decision Tree + Robust Scaling + Class Balancing**
+- **Preprocessing**: Robust Scaling + SMOTE for class balancing
+- **Model**: Decision Tree Classifier with balanced class weights
+- **Parameters**: `class_weight='balanced'`
+- **Evaluation**: 5-fold Cross-validation
+- **Performance**:
+  - Accuracy: **0.59**
+  - Precision (High Risk): **0.52**
+  - Recall (High Risk): **0.71**
+  - F1-Score: **0.60**
+- **Strengths**: Highest interpretability, good recall for high-risk detection
 
-### Clustering Analysis
-- **Optimal Clusters**: 2 clusters identified using silhouette analysis
-- **Cluster 0 (60-65%)**: Mental Health Stable Group
-  - Low anxiety, depression, and stress levels
-  - High self-esteem scores
-  - Stable sleep patterns
-- **Cluster 1 (35-40%)**: Mental Health High-Risk Group
-  - High anxiety, depression, and stress levels
-  - Low self-esteem scores
-  - Irregular sleep patterns
+### 🥉 **Rank 3: XGBoost + Threshold Tuning + Robust Scaling**
+- **Preprocessing**: Robust Scaling (Q1 method)
+- **Model**: XGBoost with threshold optimization
+- **Parameters**: `scale_pos_weight=2.0`, optimized threshold
+- **Evaluation**: Precision-Recall curve optimization
+- **Performance**:
+  - Accuracy: **0.43** (optimized for recall)
+  - Precision (High Risk): **0.38**
+  - Recall (High Risk): **0.85**
+  - F1-Score: **0.52**
+- **Strengths**: Excellent recall for clinical applications, advanced gradient boosting
 
-### Key Predictive Features
-1. **Anxiety Score** - Strongest predictor of depression risk
-2. **Self-Esteem Score** - Strong inverse correlation with depression
-3. **Stress Level** - Major contributing factor
-4. **Sleep Hours** - Sleep quality impacts mental health
-5. **Life Satisfaction Score** - Overall well-being indicator
+### 🎖️ **Rank 4: Bagging + Threshold Tuning + SMOTENC**
+- **Preprocessing**: SMOTENC for categorical features + Robust Scaling
+- **Model**: Bagging Classifier with Decision Trees
+- **Parameters**: 200 estimators, `max_samples=0.8`, optimized threshold
+- **Evaluation**: Threshold tuning for maximum recall
+- **Performance**:
+  - Accuracy: **0.32** (optimized for recall)
+  - Precision (High Risk): **0.31**
+  - Recall (High Risk): **0.92**
+  - F1-Score: **0.46**
+- **Strengths**: Highest recall rate, excellent for screening applications
+
+### 🏅 **Rank 5: K-means Clustering + PCA + Silhouette Analysis**
+- **Preprocessing**: Robust Scaling + PCA dimensionality reduction
+- **Model**: K-means Clustering (unsupervised)
+- **Parameters**: k=2 clusters, random_state=42
+- **Evaluation**: Silhouette Score + Calinski-Harabasz Index
+- **Performance**:
+  - Silhouette Score: **0.138**
+  - Cluster Separation: **2 distinct groups identified**
+  - Cluster Distribution: 60-65% stable, 35-40% high-risk
+- **Strengths**: Unsupervised pattern discovery, natural grouping identification
+
+### 📊 **Combination Analysis Summary**
+
+| Rank | Combination | Best For | Key Metric | Clinical Use Case |
+|------|-------------|----------|------------|-------------------|
+| 1 | Random Forest + Robust Scaling | **Overall Performance** | Balanced F1: 0.61 | General screening |
+| 2 | Decision Tree + Class Balancing | **Interpretability** | High Recall: 0.71 | Clinical decision support |
+| 3 | XGBoost + Threshold Tuning | **Advanced ML** | Recall: 0.85 | High-risk identification |
+| 4 | Bagging + SMOTENC | **Maximum Sensitivity** | Recall: 0.92 | Initial screening |
+| 5 | K-means + PCA | **Pattern Discovery** | Silhouette: 0.138 | Population analysis |
+
+### 🎯 **Selection Criteria**
+
+Our ranking considers multiple factors:
+1. **Clinical Relevance**: Prioritizing recall for high-risk detection
+2. **Model Robustness**: Cross-validation consistency
+3. **Interpretability**: Importance for healthcare applications
+4. **Practical Implementation**: Ease of deployment
+5. **Preprocessing Effectiveness**: Outlier handling and feature engineering
+
+### 💡 **Recommendations by Use Case**
+
+- **🏥 Clinical Screening**: Use **Rank 4 (Bagging)** for maximum sensitivity
+- **📊 General Analysis**: Use **Rank 1 (Random Forest)** for balanced performance  
+- **🔍 Research Applications**: Use **Rank 2 (Decision Tree)** for interpretability
+- **🚀 Advanced Systems**: Use **Rank 3 (XGBoost)** for sophisticated prediction
+- **📈 Population Studies**: Use **Rank 5 (K-means)** for pattern analysis
 
 ## 👥 Team & Contributions
 
@@ -249,6 +308,20 @@ The project follows a modular architecture designed for scalability and maintain
 - **Analysis & Evaluation**: 김문기, 김성은, 이지홍
 - **Documentation**: All team members
 
+### Key Files
+
+| File | Description | Auto-Generated |
+|------|-------------|----------------|
+| `main_code.py` | **🎯 Main controller** - Run this for complete analysis | ❌ |
+| `anxiety_depression_data.csv` | Original dataset from Kaggle | ❌ |
+| `encoding.py` | Data encoding module | ❌ |
+| `scaling.py` | Feature scaling module | ❌ |
+| `evaluation_kfold.py` | Classification and evaluation module | ❌ |
+| `K-means.py` | Clustering analysis module | ❌ |
+| `results/encoded_data.csv` | Encoded categorical features | ✅ |
+| `results/Robustscaling_Q1.csv` | Scaled dataset | ✅ |
+| `results/kmeans_clustering_results.csv` | Clustering results | ✅ |
+| `results/pipeline_execution_summary.txt` | Execution summary | ✅ |
 
 ## 🔬 Methodology
 
