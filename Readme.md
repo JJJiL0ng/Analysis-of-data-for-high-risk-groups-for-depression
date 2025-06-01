@@ -30,6 +30,89 @@ This project investigates the relationship between lifestyle factors and mental 
 - **Psychosocial Factors**: Social Support, Self-Esteem, Life Satisfaction, Loneliness
 - **Health Conditions**: Family History, Chronic Illnesses, Therapy Status
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.8 or higher
+- pyenv (recommended for environment management)
+- pip package manager
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/mental-health-prediction.git
+   cd mental-health-prediction
+   ```
+
+2. **Set up Python environment with pyenv** (recommended):
+   ```bash
+   # Install Python 3.9 (if not already installed)
+   pyenv install 3.9.18
+   
+   # Set local Python version for this project
+   pyenv local 3.9.18
+   
+   # Create virtual environment
+   python -m venv mental_health_env
+   
+   # Activate virtual environment
+   # On macOS/Linux:
+   source mental_health_env/bin/activate
+   # On Windows:
+   mental_health_env\Scripts\activate
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   # Upgrade pip first
+   pip install --upgrade pip
+   
+   # Install required packages
+   pip install pandas numpy scikit-learn matplotlib seaborn xgboost imbalanced-learn plotly scipy
+   ```
+
+4. **Download the dataset**:
+   ```bash
+   # Download anxiety_depression_data.csv from Kaggle and place in root directory
+   # Link: https://www.kaggle.com/datasets/ak0212/anxiety-and-depression-mental-health-factors
+   ```
+
+### Usage
+
+**🎯 One-Command Execution (Recommended)**:
+```bash
+# Run the complete pipeline with one command
+python main_code.py
+```
+
+This will automatically execute:
+1. Data encoding (`encoding.py`)
+2. Data scaling (`scaling.py`) 
+3. Classification models and evaluation (`evaluation_kfold.py`)
+4. K-means clustering analysis (`K-means.py`)
+
+**Manual Execution** (if needed):
+```bash
+# Run individual modules
+python encoding.py
+python scaling.py
+python evaluation_kfold.py
+python K-means.py
+```
+
+### Expected Output
+After successful execution, you'll find:
+```
+results/
+├── encoded_data.csv                    # Processed categorical data
+├── Robustscaling_Q1.csv               # Scaled numerical data
+├── kmeans_clustering_results.csv       # Clustering analysis results
+└── pipeline_execution_summary.txt      # Complete execution summary
+```
+
+Plus various visualization plots displayed during execution.
+
 ## 🏗️ Architecture
 
 The project follows a modular architecture designed for scalability and maintainability:
@@ -46,29 +129,29 @@ The project follows a modular architecture designed for scalability and maintain
 ├─────────────────────────────────────────────────────────────┤
 │  Classification Models  │  Clustering Analysis │ Evaluation │
 │  • Decision Tree        │  • K-means Clustering│ • Cross-   │
-│  • Random Forest        │  • Silhouette Score  │  validation│
+│  • Random Forest        │  • Silhouette Score  │   validation│
 │  • XGBoost              │  • Elbow Method      │ • Metrics  │
 │  • Bagging Classifier   │                      │ • Reports  │
 └─────────────────────────────────────────────────────────────┘
                               │
-┌─────────────────────────────────────────────────────────────  ┐
-│                   PROCESSING LAYER                            │
-├─────────────────────────────────────────────────────────────  ┤
-│  Data Preprocessing  │  Feature Engineering │ Model Training  │
+┌─────────────────────────────────────────────────────────────┐
+│                   PROCESSING LAYER                          │
+├─────────────────────────────────────────────────────────────┤
+│  Data Preprocessing  │  Feature Engineering │ Model Training│
 │  • Data Cleaning     │  • Feature Selection │ • Hyperparameter│
-│  • Encoding          │  • Scaling           │   Tuning        │
-│  • Outlier Handling  │  • SMOTE/SMOTENC     │ • Threshold     │
-│                      │                      │   Optimization  │
-└─────────────────────────────────────────────────────────────  ┘
+│  • Encoding          │  • Scaling           │   Tuning      │
+│  • Outlier Handling  │  • SMOTE/SMOTENC     │ • Threshold   │
+│                      │                      │   Optimization│
+└─────────────────────────────────────────────────────────────┘
                               │
-┌─────────────────────────────────────────────────────────────  ┐
-│                     DATA LAYER                                │
-├─────────────────────────────────────────────────────────────  ┤
-│    Raw Data Storage    │    Processed Data    │  Model Storage│
-│  • anxiety_depression  │  • Encoded Features  │ • Trained     │
-│    _data.csv           │  • Scaled Data        │   Models     │
-│  • Original Features   │  • Target Variables   │ • Configs    │
-└────────────────────────────────────────────────────────────  ─┘
+┌─────────────────────────────────────────────────────────────┐
+│                     DATA LAYER                              │
+├─────────────────────────────────────────────────────────────┤
+│    Raw Data Storage   │    Processed Data    │  Model Storage│
+│  • anxiety_depression │  • Encoded Features  │ • Trained    │
+│    _data.csv          │  • Scaled Data       │   Models     │
+│  • Original Features  │  • Target Variables  │ • Configs    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### Core Components
@@ -166,6 +249,7 @@ The project follows a modular architecture designed for scalability and maintain
 - **Analysis & Evaluation**: 김문기, 김성은, 이지홍
 - **Documentation**: All team members
 
+
 ## 🔬 Methodology
 
 ### 1. Data Preprocessing
@@ -214,9 +298,9 @@ plotly>=5.0.0          # Interactive visualizations
 
 ## 📚 Documentation
 
-- **[Methodology](docs/methodology.md)**: Detailed technical approach
-- **[API Documentation](docs/api_documentation.md)**: Function and class references
-- **[Clinical Interpretation](docs/clinical_interpretation.md)**: Healthcare implications
+- **[Project Report](docs/Team10_report.md)**: Complete academic report with methodology and results
+- **[API Documentation](docs/api_documentation.md)**: Function and class references  
+- **[Clinical Interpretation](docs/clinical_interpretation.md)**: Healthcare implications and insights
 - **[Contributing Guidelines](CONTRIBUTING.md)**: How to contribute to the project
 
 ## 🤝 Contributing

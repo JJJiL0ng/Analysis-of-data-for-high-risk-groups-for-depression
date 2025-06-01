@@ -1,0 +1,48 @@
+
+Mental Health Prediction Pipeline - Execution Summary
+====================================================
+Execution Time: 2025-06-01 23:46:48
+
+Pipeline Modules Executed:
+==========================
+
+1. Data Encoding (encoding.py)
+   Status: ✅ SUCCESS
+   Description: Applied ordinal and one-hot encoding to categorical variables
+
+2. Data Scaling (scaling.py)  
+   Status: ✅ SUCCESS
+   Description: Applied robust scaling using Q1 method to numerical features
+
+3. Classification & Evaluation (evaluation_kfold.py)
+   Status: ✅ SUCCESS
+   Description: Trained multiple models and performed k-fold cross-validation
+   Models: Decision Tree, Random Forest, XGBoost, Bagging Classifier
+
+4. Clustering Analysis (K-means.py)
+   Status: ✅ SUCCESS
+   Description: Performed K-means clustering analysis with optimal cluster detection
+
+Overall Pipeline Status:
+========================
+Total Modules: 4
+Successful: 4
+Failed: 0
+
+Success Rate: 100.0%
+
+Generated Files:
+===============
+- Check the results/ directory for all output files
+- Visualization plots may be displayed during execution
+- CSV files with processed data and results
+
+Notes:
+======
+- Each module was executed independently
+- Some modules may generate plots that display automatically
+- Check individual module outputs for detailed results
+- If any module failed, check the error messages above
+
+Pipeline completed at: 2025-06-01 23:46:48
+        
