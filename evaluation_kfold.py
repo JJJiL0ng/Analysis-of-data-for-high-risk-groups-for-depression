@@ -7,7 +7,7 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, RobustScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split, KFold
 from xgboost import XGBClassifier, plot_importance
-from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve
+from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve, roc_curve, auc
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
 from imblearn.over_sampling import SMOTENC
 
@@ -223,7 +223,7 @@ feature_importance = feature_importance.sort_values(ascending=False)
 
 plt.figure(figsize=(10,6))
 sns.barplot(x=feature_importance, y=feature_importance.index)
-plt.title('Feature Importance from Decision Tree')
+plt.title('Feature Importance from Decision Tree - SMOTE')
 plt.show()
 
 #1. RandomForest 분류기
@@ -240,7 +240,7 @@ feature_importance = feature_importance.sort_values(ascending=False)
 
 plt.figure(figsize=(10,6))
 sns.barplot(x=feature_importance, y=feature_importance.index)
-plt.title('Feature Importance from Random Forest')
+plt.title('Feature Importance from Random Forest - SMOTE')
 plt.show()
 
 new_features = pd.DataFrame({
@@ -249,10 +249,36 @@ new_features = pd.DataFrame({
     'isolation_index': data['Loneliness_Score'] / data['Social_Support_Score']
 })
 
-X = scaled_df.drop(columns=['Depression_Level', 'Depression_Score'])  # 타깃 제외  
 X_train, X_test, y_train, y_test = train_test_split(
     X, binary_y, test_size=0.2, random_state=42, stratify=binary_y
 )
+
+# Decision Tree 학습
+dt_model = DecisionTreeClassifier(random_state=42, class_weight='balanced')
+dt_model.fit(X_train, y_train)
+
+# 예측 및 평가
+y_pred_dt = dt_model.predict(X_test)
+print("Decision Tree report - New Features")
+print(classification_report(y_test, y_pred_dt))
+
+# RandomForest 분류기
+rf_model = RandomForestClassifier(random_state=42)
+# 학습
+rf_model.fit(X_train, y_train)
+# 예측 및 평가
+y_pred_rf = rf_model.predict(X_test)
+print("Random Forest report - New Features")
+print(classification_report(y_test, y_pred_rf))
+
+# XGBoost 분류기
+xgb_model = XGBClassifier(random_state=42)
+
+# 학습
+xgb_model.fit(X_train, y_train)
+
+# 예측 및 평가
+y_pred_xgb = xgb_model.predict(X_test)
 
 # Bagging 모델로 확률 예측
 # predict_proba returns the probability of each class 0, 1 for every sample
@@ -340,6 +366,7 @@ bag_model = BaggingClassifier(
     random_state=42
 )
 bag_model.fit(X_train_val, y_train_val)
+
 # Get predicted probabilities for the positive class on the holdout set
 val_probs_bag = bag_model.predict_proba(X_holdout)[:, 1]
 # Use the previously selected best threshold to generate final predictions
@@ -358,6 +385,28 @@ print(f"[XGBoost best threshold] {best_thr_xgb:.2f}")
 print("=== Classification Report @ Best Threshold (Bagging) ===")
 print(classification_report(y_holdout, y_pred_best_bag))
 print(f"[Bagging best threshold] {best_thr_bag:.2f}")
+
+# 각 tree의 feature_importances_ 수집
+importances = np.array([
+    tree.feature_importances_ for tree in bag_model.estimators_
+    if hasattr(tree, "feature_importances_")
+])
+
+# 평균 계산
+avg_importance = np.mean(importances, axis=0)
+
+# 시리즈로 변환
+feature_importance_series = pd.Series(avg_importance, index=X.columns)
+feature_importance_series = feature_importance_series.sort_values(ascending=False)
+
+# 시각화
+plt.figure(figsize=(10, 6))
+sns.barplot(x=feature_importance_series.values, y=feature_importance_series.index)
+plt.title("Average Feature Importance from BaggingClassifier")
+plt.xlabel("Feature Importance")
+plt.ylabel("Features")
+plt.tight_layout()
+plt.show()
 
 # k-fold cross validation for testing classification models
 kfold = KFold(n_splits=5, shuffle=True, random_state=42)
@@ -450,4 +499,21 @@ plt.ylabel('Accuracy')
 plt.legend()
 plt.grid(True)
 plt.ylim(0, 1)
+plt.show()
+
+y_probs_bag = bag_model.predict_proba(X_test)[:, 1]
+
+# ROC Curve 계산
+fpr_bag, tpr_bag, thresholds_bag = roc_curve(y_test, y_probs_bag)
+roc_auc_bag = auc(fpr_bag, tpr_bag)
+
+# ROC Curve 시각화
+plt.figure(figsize=(8, 6))
+plt.plot(fpr_bag, tpr_bag, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc_bag:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', label='Random guess')
+plt.xlabel('False Positive Rate (1 - Specificity)')
+plt.ylabel('True Positive Rate (Recall)')
+plt.title('Receiver Operating Characteristic (ROC) Curve - Bagging')
+plt.legend(loc='lower right')
+plt.grid(True)
 plt.show()

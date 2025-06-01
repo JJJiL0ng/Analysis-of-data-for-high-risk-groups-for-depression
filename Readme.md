@@ -30,54 +30,6 @@ This project investigates the relationship between lifestyle factors and mental 
 - **Psychosocial Factors**: Social Support, Self-Esteem, Life Satisfaction, Loneliness
 - **Health Conditions**: Family History, Chronic Illnesses, Therapy Status
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8 or higher
-- pip package manager
-
-### Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/mental-health-prediction.git
-   cd mental-health-prediction
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Download the dataset**:
-   ```bash
-   # Place anxiety_depression_data.csv in data/raw/ directory
-   mkdir -p data/raw
-   # Download from Kaggle and place in data/raw/
-   ```
-
-### Usage
-
-1. **Run data preprocessing**:
-   ```bash
-   python src/data_preprocessing.py
-   ```
-
-2. **Train classification models**:
-   ```bash
-   python src/models/classification.py
-   ```
-
-3. **Perform clustering analysis**:
-   ```bash
-   python src/models/clustering.py
-   ```
-
-4. **Generate evaluation reports**:
-   ```bash
-   python src/models/evaluation.py
-   ```
-
 ## 🏗️ Architecture
 
 The project follows a modular architecture designed for scalability and maintainability:
@@ -86,7 +38,7 @@ The project follows a modular architecture designed for scalability and maintain
 ┌─────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                       │
 ├─────────────────────────────────────────────────────────────┤
-│  Jupyter Notebooks  │  Visualization  │  Reports & Results │
+│  Jupyter Notebooks  │  Visualization  │  Reports & Results  │
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
@@ -94,29 +46,29 @@ The project follows a modular architecture designed for scalability and maintain
 ├─────────────────────────────────────────────────────────────┤
 │  Classification Models  │  Clustering Analysis │ Evaluation │
 │  • Decision Tree        │  • K-means Clustering│ • Cross-   │
-│  • Random Forest        │  • Silhouette Score  │   validation│
-│  • XGBoost             │  • Elbow Method      │ • Metrics  │
-│  • Bagging Classifier  │                      │ • Reports  │
+│  • Random Forest        │  • Silhouette Score  │  validation│
+│  • XGBoost              │  • Elbow Method      │ • Metrics  │
+│  • Bagging Classifier   │                      │ • Reports  │
 └─────────────────────────────────────────────────────────────┘
                               │
-┌─────────────────────────────────────────────────────────────┐
-│                   PROCESSING LAYER                          │
-├─────────────────────────────────────────────────────────────┤
-│  Data Preprocessing  │  Feature Engineering │ Model Training│
+┌─────────────────────────────────────────────────────────────  ┐
+│                   PROCESSING LAYER                            │
+├─────────────────────────────────────────────────────────────  ┤
+│  Data Preprocessing  │  Feature Engineering │ Model Training  │
 │  • Data Cleaning     │  • Feature Selection │ • Hyperparameter│
-│  • Encoding          │  • Scaling          │   Tuning     │
-│  • Outlier Handling  │  • SMOTE/SMOTENC    │ • Threshold  │
-│                      │                     │   Optimization│
-└─────────────────────────────────────────────────────────────┘
+│  • Encoding          │  • Scaling           │   Tuning        │
+│  • Outlier Handling  │  • SMOTE/SMOTENC     │ • Threshold     │
+│                      │                      │   Optimization  │
+└─────────────────────────────────────────────────────────────  ┘
                               │
-┌─────────────────────────────────────────────────────────────┐
-│                     DATA LAYER                              │
-├─────────────────────────────────────────────────────────────┤
+┌─────────────────────────────────────────────────────────────  ┐
+│                     DATA LAYER                                │
+├─────────────────────────────────────────────────────────────  ┤
 │    Raw Data Storage    │    Processed Data    │  Model Storage│
-│  • anxiety_depression  │  • Encoded Features  │ • Trained    │
-│    _data.csv          │  • Scaled Data       │   Models     │
-│  • Original Features  │  • Target Variables  │ • Configs    │
-└─────────────────────────────────────────────────────────────┘
+│  • anxiety_depression  │  • Encoded Features  │ • Trained     │
+│    _data.csv           │  • Scaled Data        │   Models     │
+│  • Original Features   │  • Target Variables   │ • Configs    │
+└────────────────────────────────────────────────────────────  ─┘
 ```
 
 ### Core Components
