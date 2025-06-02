@@ -121,7 +121,7 @@ The project follows a modular architecture designed for scalability and maintain
 ┌─────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                       │
 ├─────────────────────────────────────────────────────────────┤
-│  Jupyter Notebooks   │  Visualization  │  Reports & Results │
+│  Jupyter Notebooks  │  Visualization  │  Reports & Results  │
 └─────────────────────────────────────────────────────────────┘
                               │
 ┌─────────────────────────────────────────────────────────────┐
@@ -147,8 +147,8 @@ The project follows a modular architecture designed for scalability and maintain
 ┌─────────────────────────────────────────────────────────────┐
 │                     DATA LAYER                              │
 ├─────────────────────────────────────────────────────────────┤
-│    Raw Data Storage    │    Processed Data    │  Model Storage│
-│  • anxiety_depression  │  • Encoded Features  │ • Trained    │
+│    Raw Data Storage   │    Processed Data    │  Model Storage│
+│  • anxiety_depression │  • Encoded Features  │ • Trained    │
 │    _data.csv          │  • Scaled Data       │   Models     │
 │  • Original Features  │  • Target Variables  │ • Configs    │
 └─────────────────────────────────────────────────────────────┘
@@ -202,93 +202,128 @@ The project follows a modular architecture designed for scalability and maintain
 
 ## 🏆 Top 5 Best Model Combinations
 
-Based on comprehensive analysis of different preprocessing methods, model algorithms, and evaluation metrics, here are the **top 5 performing combinations** for mental health risk prediction:
+Based on comprehensive analysis using our modular framework that tests multiple preprocessing methods, model algorithms, and evaluation metrics, here are the **top 5 performing combinations** for mental health risk prediction:
 
-### 🥇 **Rank 1: Random Forest + Robust Scaling + Binary Classification**
-- **Preprocessing**: Robust Scaling (Q1 method) + Ordinal & One-hot Encoding
+### 🥇 **Rank 1: Random Forest + Robust Scaling**
+- **Preprocessing**: Robust Scaling + Ordinal & One-hot Encoding
 - **Model**: Random Forest Classifier
-- **Parameters**: Default parameters with 100 estimators
-- **Evaluation**: 5-fold Cross-validation
+- **Parameters**: 
+  - n_estimators: 50
+  - max_depth: 8
+  - max_features: sqrt
+  - criterion: gini
+- **Evaluation**: Holdout validation
 - **Performance**: 
-  - Accuracy: **0.69**
-  - Precision (High Risk): **0.65**
-  - Recall (High Risk): **0.58**
-  - F1-Score: **0.61**
-- **Strengths**: Best overall balance between precision and recall, robust to outliers
+  - **Accuracy: 0.428**
+- **Strengths**: Best overall performance with robust scaling, handles outliers effectively
 
-### 🥈 **Rank 2: Decision Tree + Robust Scaling + Class Balancing**
-- **Preprocessing**: Robust Scaling + SMOTE for class balancing
-- **Model**: Decision Tree Classifier with balanced class weights
-- **Parameters**: `class_weight='balanced'`
-- **Evaluation**: 5-fold Cross-validation
+### 🥈 **Rank 2: Random Forest + Z-Score Scaling**
+- **Preprocessing**: Z-Score (Standard) Scaling + Encoding
+- **Model**: Random Forest Classifier
+- **Parameters**: 
+  - n_estimators: 100
+  - max_depth: 8
+  - max_features: log2
+  - criterion: gini
+- **Evaluation**: Stratified K-fold Cross-validation
 - **Performance**:
-  - Accuracy: **0.59**
-  - Precision (High Risk): **0.52**
-  - Recall (High Risk): **0.71**
-  - F1-Score: **0.60**
-- **Strengths**: Highest interpretability, good recall for high-risk detection
+  - **Accuracy: 0.427**
+- **Strengths**: Excellent cross-validation performance, standard preprocessing approach
 
-### 🥉 **Rank 3: XGBoost + Threshold Tuning + Robust Scaling**
-- **Preprocessing**: Robust Scaling (Q1 method)
-- **Model**: XGBoost with threshold optimization
-- **Parameters**: `scale_pos_weight=2.0`, optimized threshold
-- **Evaluation**: Precision-Recall curve optimization
+### 🥉 **Rank 3: Decision Tree + Robust Scaling**
+- **Preprocessing**: Robust Scaling + Encoding
+- **Model**: Decision Tree Classifier
+- **Parameters**: 
+  - max_depth: 3
+  - criterion: gini
+  - splitter: best
+- **Evaluation**: Holdout validation
 - **Performance**:
-  - Accuracy: **0.43** (optimized for recall)
-  - Precision (High Risk): **0.38**
-  - Recall (High Risk): **0.85**
-  - F1-Score: **0.52**
-- **Strengths**: Excellent recall for clinical applications, advanced gradient boosting
+  - **Accuracy: 0.424**
+- **Strengths**: High interpretability, simple tree structure, robust to outliers
 
-### 🎖️ **Rank 4: Bagging + Threshold Tuning + SMOTENC**
-- **Preprocessing**: SMOTENC for categorical features + Robust Scaling
-- **Model**: Bagging Classifier with Decision Trees
-- **Parameters**: 200 estimators, `max_samples=0.8`, optimized threshold
-- **Evaluation**: Threshold tuning for maximum recall
+### 🎖️ **Rank 4: Decision Tree + Z-Score Scaling (Entropy)**
+- **Preprocessing**: Z-Score Scaling + Encoding
+- **Model**: Decision Tree Classifier
+- **Parameters**: 
+  - max_depth: 3
+  - criterion: entropy
+  - splitter: best
+- **Evaluation**: Holdout validation
 - **Performance**:
-  - Accuracy: **0.32** (optimized for recall)
-  - Precision (High Risk): **0.31**
-  - Recall (High Risk): **0.92**
-  - F1-Score: **0.46**
-- **Strengths**: Highest recall rate, excellent for screening applications
+  - **Accuracy: 0.424**
+- **Strengths**: Information gain-based splits, good interpretability
 
-### 🏅 **Rank 5: K-means Clustering + PCA + Silhouette Analysis**
-- **Preprocessing**: Robust Scaling + PCA dimensionality reduction
-- **Model**: K-means Clustering (unsupervised)
-- **Parameters**: k=2 clusters, random_state=42
-- **Evaluation**: Silhouette Score + Calinski-Harabasz Index
+### 🏅 **Rank 5: Decision Tree + Z-Score Scaling (Gini)**
+- **Preprocessing**: Z-Score Scaling + Encoding
+- **Model**: Decision Tree Classifier
+- **Parameters**: 
+  - max_depth: 3
+  - criterion: gini
+  - splitter: best
+- **Evaluation**: Holdout validation
 - **Performance**:
-  - Silhouette Score: **0.138**
-  - Cluster Separation: **2 distinct groups identified**
-  - Cluster Distribution: 60-65% stable, 35-40% high-risk
-- **Strengths**: Unsupervised pattern discovery, natural grouping identification
+  - **Accuracy: 0.424**
+- **Strengths**: Gini impurity-based splits, consistent performance
 
-### 📊 **Combination Analysis Summary**
+### 📊 **Key Insights from Modular Analysis**
 
-| Rank | Combination | Best For | Key Metric | Clinical Use Case |
-|------|-------------|----------|------------|-------------------|
-| 1 | Random Forest + Robust Scaling | **Overall Performance** | Balanced F1: 0.61 | General screening |
-| 2 | Decision Tree + Class Balancing | **Interpretability** | High Recall: 0.71 | Clinical decision support |
-| 3 | XGBoost + Threshold Tuning | **Advanced ML** | Recall: 0.85 | High-risk identification |
-| 4 | Bagging + SMOTENC | **Maximum Sensitivity** | Recall: 0.92 | Initial screening |
-| 5 | K-means + PCA | **Pattern Discovery** | Silhouette: 0.138 | Population analysis |
+#### **Preprocessing Performance**
+| Scaling Method | Best Accuracy | Preferred Models |
+|----------------|---------------|------------------|
+| **Robust Scaling** | 0.428 | Random Forest, Decision Tree |
+| **Z-Score Scaling** | 0.427 | Random Forest, Decision Tree |
+| **MinMax Scaling** | - | (Lower performance) |
 
-### 🎯 **Selection Criteria**
+#### **Model Performance Ranking**
+| Model Type | Best Configuration | Key Advantage |
+|------------|-------------------|---------------|
+| **Random Forest** | 50-100 estimators, depth 8 | **Highest accuracy** |
+| **Decision Tree** | Max depth 3 | **Best interpretability** |
+| **XGBoost** | (In progress) | Advanced gradient boosting |
+| **Bagging** | (In progress) | Ensemble robustness |
 
-Our ranking considers multiple factors:
-1. **Clinical Relevance**: Prioritizing recall for high-risk detection
-2. **Model Robustness**: Cross-validation consistency
-3. **Interpretability**: Importance for healthcare applications
-4. **Practical Implementation**: Ease of deployment
-5. **Preprocessing Effectiveness**: Outlier handling and feature engineering
+#### **Evaluation Strategy Impact**
+- **Holdout Validation**: Faster execution, good for initial screening
+- **Stratified K-Fold**: More robust, better for final model selection
+- **Cross-Validation**: Recommended for production deployment
 
-### 💡 **Recommendations by Use Case**
+### 🎯 **Selection Criteria & Framework**
 
-- **🏥 Clinical Screening**: Use **Rank 4 (Bagging)** for maximum sensitivity
-- **📊 General Analysis**: Use **Rank 1 (Random Forest)** for balanced performance  
-- **🔍 Research Applications**: Use **Rank 2 (Decision Tree)** for interpretability
-- **🚀 Advanced Systems**: Use **Rank 3 (XGBoost)** for sophisticated prediction
-- **📈 Population Studies**: Use **Rank 5 (K-means)** for pattern analysis
+Our modular analysis framework evaluates combinations based on:
+
+1. **Preprocessing Effectiveness**: How well different scaling methods handle outliers
+2. **Model Robustness**: Consistency across different evaluation strategies  
+3. **Parameter Optimization**: Automated hyperparameter tuning results
+4. **Clinical Applicability**: Balance between accuracy and interpretability
+5. **Computational Efficiency**: Training time and resource requirements
+
+### 🔬 **Modular Analysis Architecture**
+
+```python
+# Our unified analysis function tests combinations systematically:
+comprehensive_mental_health_analysis()
+├── encoding.py          # Categorical feature processing
+├── scaling.py           # Numerical feature scaling  
+├── evaluation_kfold.py  # Model training & validation
+└── K-means.py          # Clustering analysis
+
+# Automatically generates:
+results/
+├── modular_all_combinations.csv      # Complete results matrix
+├── modular_top_5_combinations.csv    # Best performing models
+└── modular_analysis_summary.json     # Execution metadata
+```
+
+### 💡 **Clinical Application Recommendations**
+
+Based on our modular analysis results:
+
+- **🏥 Clinical Decision Support**: Use **Rank 3-5 (Decision Trees)** for maximum interpretability
+- **📊 Screening Applications**: Use **Rank 1-2 (Random Forest)** for highest accuracy
+- **🔍 Research Studies**: Use **Rank 2** for robust cross-validation results
+- **⚡ Real-time Systems**: Use **Rank 3** for fastest inference with acceptable accuracy
+- **📈 Population Analysis**: Combine with clustering results for comprehensive insights
 
 ## 👥 Team & Contributions
 
@@ -383,3 +418,8 @@ We welcome contributions from the community! Please see our [Contributing Guidel
 - Testing requirements
 - Pull request process
 - Issue reporting
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
